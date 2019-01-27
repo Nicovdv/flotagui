@@ -1,0 +1,94 @@
+<div class="xmls-page">
+  <div *ngIf="newXmlActive">
+    <div class="add-xml-section">
+      <div class="new-xml-title">
+        Dodaj samochód
+      </div>
+      <form #form="ngForm">
+        <div>
+          <mat-form-field hideRequiredMarker class="input-form-field">
+            <input #name matInput placeholder="Nr rejestracyjny samochodu" required [(ngModel)]="car.reg" name="name">
+            <mat-error *ngIf="name.errors?.required">Numer rejestracyjny nie moze być pusty</mat-error>
+          </mat-form-field>
+          <mat-form-field hideRequiredMarker class="input-form-field">
+            <input #phone matInput placeholder="Nr telefonu kierowcy" required [(ngModel)]="car.phone" name="phone">
+            <mat-error *ngIf="phone.errors?.required">Numer telefonu nie moze być pusty</mat-error>
+          </mat-form-field>
+        </div>
+      </form>
+      <div>
+        <button mat-flat-button class="add-xml-button" color="primary" [disabled]="form.invalid" (click)="onClickCreate(false)">Dodaj</button>
+        <button mat-flat-button class="add-xml-button" color="primary" [disabled]="form.invalid" (click)="onClickCreate(true)">Dodaj
+          i wróc do mapy</button>
+        <button mat-flat-button class="add-xml-button cancel-xml-button" (click)="onClickCancel()">Anuluj</button>
+      </div>
+    </div>
+
+  </div>
+  <div class="xmls-list-section">
+    <div class="xmls-header">
+      <div class="xmls-title">
+        Samochody
+      </div>
+      <div *ngIf="!newXmlActive">
+        <button mat-flat-button color="primary" class="xmls-add-button" (click)="onAddXml()">
+          <mat-icon>add</mat-icon><span>Dodaj nowy samochód</span>
+        </button>
+      </div>
+    </div>
+    <div class="xmls-list">
+      <div *ngIf="cars.length != 0">
+        <mat-form-field class="xmls-filter-input">
+          <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Szukaj">
+        </mat-form-field>
+
+        <table mat-table [dataSource]="dataSource" class="xmls-table">
+          <!-- Name Column -->
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef>Numer rejstracyjny</th>
+            <td mat-cell *matCellDef="let element">
+              {{element.reg}}
+            </td>
+          </ng-container>
+
+          <!-- Name Column -->
+          <ng-container matColumnDef="active">
+            <th mat-header-cell *matHeaderCellDef>Czy jest w trasie?</th>
+            <td mat-cell *matCellDef="let element">
+              <div *ngIf="element.active">TAK</div>
+              <div *ngIf="!element.active">NIE</div>
+            </td>
+          </ng-container>
+
+          <!-- Name Column -->
+          <ng-container matColumnDef="goTo">
+            <th mat-header-cell *matHeaderCellDef>Wysylka</th>
+            <td mat-cell *matCellDef="let element">
+              <div *ngIf="!element.active"><button mat-flat-button (click)="sendToPlace(element)" 
+                class="xml-link-button">Wyslij do...
+              </button></div>
+            </td>
+          </ng-container>
+
+          <!-- Delete Column -->
+          <ng-container matColumnDef="deleteButton">
+            <th mat-header-cell *matHeaderCellDef class="delete-button-table-column"></th>
+            <td mat-cell *matCellDef="let element">
+              <button mat-button (click)="onClickDeleteButton(element)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      </div>
+      <div *ngIf="cars.length == 0">
+        <div class="empty-list-title">
+          Lista jest pusta
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,12 @@
+<div class="header">
+  <h1>{{title}}</h1>
+  <button mat-button routerLink="/">Mapa</button>
+  <button mat-button routerLink="/cars">Zarządzaj flotą</button>
+  <button mat-icon-button class="event-button" [matMenuTriggerFor]="appMenu" (menuClosed)="onMenuClosed()">
+    <mat-icon class="notification-icon" matBadge="{{notificationsCount}}" matBadgeHidden="{{!isVisibleBadge}}"
+      matBadgePosition="above after" matBadgeColor="warn" matBadgeSize="large" matIconSize="large">notifications</mat-icon>
+    <mat-menu #appMenu="matMenu">
+      <button (click)="onEventClick(event)" mat-menu-item *ngFor="let event of events">{{event.reg}}</button>
+    </mat-menu>
+  </button>
+</div>
